@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>活跃可转债数据</title>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 定义函数来获取数据并更新网页内容
+            function getDataAndRefresh() {
+                $.getJSON("/get_data", function(data) {
+                    // 清空表格内容，但保留表头
+$                   ("#data-table tr:not(:first)").remove();
+                    // 更新表格内容
+                    data.forEach(function(row) {
+                        var rowHtml = "<tr>";
+                        rowHtml += "<td>" + row['转债名称'] + "</td>";
+                        rowHtml += "<td>" + row['转债代码'] + "</td>";
+                        rowHtml += "<td>" + row['正股涨跌幅'] + "</td>";
+                        rowHtml += "<td>" + row['转股溢价率'] + "</td>";
+                        rowHtml += "<td>" + row['转债涨跌幅'] + "</td>";
+                        rowHtml += "<td>" + row['转债最新价'] + "</td>";
+                        rowHtml += "<td>" + row['活跃度得分'] + "</td>";
+                        rowHtml += "</tr>";
+
+                        $("#data-table").append(rowHtml);
+                    });
+                });
+            }
+
+            // 页面加载时首次获取数据并更新网页内容
+            getDataAndRefresh();
+
+            // 每隔 10 秒获取数据并更新网页内容
+            setInterval(getDataAndRefresh, 10000);
+        });
+    </script>
+</head>
+<body>
+    <h1>活跃可转债数据</h1>
+    <table id="data-table">
+        <tr>
+            <th>转债名称</th>
+            <th>转债代码</th>
+            <th>正股涨跌幅</th>
+            <th>转股溢价率</th>
+            <th>转债涨跌幅</th>
+            <th>转债最新价</th>
+            <th>活跃度得分</th>
+        </tr>
+    </table>
+</body>
+</html>
